@@ -6,7 +6,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "pnpm --filter @plant-pulse/api dev",
+    "dev": "pnpm --filter @lab-plant-pulse/api dev",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
