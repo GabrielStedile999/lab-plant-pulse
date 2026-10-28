@@ -19,3 +19,12 @@ export class SequentialIdGenerator implements IdGenerator {
     return `${this.prefix}-${this.counter}`;
   }
 }
+
+/** UUIDs válidos e previsíveis: ...-000000000001, ...-000000000002 (versão 7, variante 8). */
+export class SequentialUuidGenerator implements IdGenerator {
+  private counter = 0;
+  next(): string {
+    this.counter += 1;
+    return `0192f1a2-7c3e-7000-8000-${String(this.counter).padStart(12, '0')}`;
+  }
+}
