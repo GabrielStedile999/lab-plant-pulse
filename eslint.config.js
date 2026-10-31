@@ -6,6 +6,13 @@ export default tseslint.config(
   { ignores: ["**/dist/**", "**/node_modules/**", "**/drizzle/**", "apps/web/**", "apps/simulator/**"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    files: ['**/*.cjs'],
+    languageOptions: {
+      sourceType: 'commonjs',
+      globals: { module: 'writable', require: 'readonly', __dirname: 'readonly', process: 'readonly' },
+    },
+  },
   prettier,
   {
     rules: {
