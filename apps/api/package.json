@@ -17,11 +17,13 @@
     "drizzle-orm": "^0.45.4",
     "fastify": "^5.12.7",
     "fastify-type-provider-zod": "^7.0.0",
+    "mongodb": "^7.8.0",
     "pg": "^8.23.1",
     "uuid": "^14.0.3",
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@testcontainers/mongodb": "^12.2.1",
     "@testcontainers/postgresql": "^12.2.1",
     "@types/node": "^26.6.5",
     "@types/pg": "^8.23.1",

@@ -33,8 +33,12 @@ export class IngestTelemetry {
       else rejected.push({ index, code: result.error.code, message: result.error.message });
     });
 
-    const freshIds = new Set(await this.dedupe.filterNew(candidates.map((r) => r.readingId)));
-    const accepted = candidates.filter((r) => freshIds.has(r.readingId));
+    const fresh = new Set(await this.dedupe.filterNew(candidates.map((r) => r.readingId)));
+    const accepted: TelemetryReading[] = [];
+    for (const r of candidates) {
+      // Set.delete devolve true só na primeira vez: a segunda ocorrência do mesmo id no lote é duplicata.
+      if (fresh.delete(r.readingId)) accepted.push(r);
+    }
 
     if (accepted.length > 0) await this.store.append(accepted);
 
