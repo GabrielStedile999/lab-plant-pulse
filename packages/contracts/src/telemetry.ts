@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { SensorTypeSchema } from './asset';
 
 export const MACHINE_STATUSES = ['running', 'idle', 'fault'] as const;
 export const MachineStatusSchema = z.enum(MACHINE_STATUSES);
