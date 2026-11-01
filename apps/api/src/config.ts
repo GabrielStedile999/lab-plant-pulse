@@ -5,6 +5,9 @@ const EnvSchema = z.object({
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   DATABASE_URL: z.url(),
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  MONGO_URL: z.url(),
+  MQTT_URL: z.url(),
+  MQTT_CLIENT_ID: z.string().min(1).default('lab-plant-pulse-api'),
 });
 
 export type Config = z.infer<typeof EnvSchema>;

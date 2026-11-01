@@ -35,7 +35,10 @@ describe('MongoTelemetryStore', () => {
   });
 
   it('creates the collection as a time series with the expected options', async () => {
-    const [info] = await client.db('lab_plant_pulse_test').listCollections({ name: TELEMETRY_COLLECTION }).toArray();
+    const [info] = await client
+  .db('lab_plant_pulse_test')
+  .listCollections({ name: TELEMETRY_COLLECTION }, { nameOnly: false })
+  .toArray();
 
     expect(info?.type).toBe('timeseries');
     expect(info?.options).toMatchObject({ timeseries: { timeField: 'ts', metaField: 'assetId' }, expireAfterSeconds: 604_800 });

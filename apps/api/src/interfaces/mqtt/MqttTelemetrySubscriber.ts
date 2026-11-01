@@ -3,6 +3,8 @@ import mqtt, { type MqttClient } from 'mqtt';
 import type { Logger } from 'pino';
 import type { IngestTelemetry, TelemetryReadingInput } from '../../application/use-cases/IngestTelemetry';
 
+export type SubscriberLogger = Pick<Logger, 'debug' | 'info' | 'warn' | 'error'>;
+
 export interface MqttSubscriberOptions {
   url: string;
   clientId: string;
@@ -26,7 +28,7 @@ export class MqttTelemetrySubscriber {
 
   constructor(
     private readonly ingest: IngestTelemetry,
-    private readonly log: Logger,
+    private readonly log: SubscriberLogger,
     private readonly options: MqttSubscriberOptions,
   ) {
     this.topic = options.topic ?? 'plant/+/+/telemetry';
