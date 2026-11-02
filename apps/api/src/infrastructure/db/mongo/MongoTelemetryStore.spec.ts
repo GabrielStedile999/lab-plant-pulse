@@ -27,6 +27,10 @@ describe('MongoTelemetryStore', () => {
       .withExposedPorts(27017)
       .withWaitStrategy(Wait.forLogMessage(/Waiting for connections/))
       .withStartupTimeout(120_000)
+      .withLogConsumer((stream) => {
+        stream.on('data', (line: string) => process.stderr.write(`[mongo] ${line}`));
+        stream.on('err', (line: string) => process.stderr.write(`[mongo:err] ${line}`));
+      })
       .start();
     const mongo = await createMongo(`mongodb://${container.getHost()}:${container.getMappedPort(27017)}`, 'lab_plant_pulse_test');
     client = mongo.client;
