@@ -10,7 +10,9 @@ architecture, Angular 22, Postgres + MongoDB, TDD, Docker, CI e observabilidade 
 corepack enable && pnpm install
 cp .env.example .env
 pnpm infra:up          # postgres, mongo, mosquitto, grafana (localhost:3001)
-pnpm dev               # api em localhost:3000 (migrações rodam na subida)
+pnpm dev
+pnpm --filter @lab-plant-pulse/api db:seed
+docker compose up -d --build simulator              # api em localhost:3000 (migrações rodam na subida)
 ```
 
 ## Testar
@@ -24,3 +26,5 @@ pnpm lint && pnpm typecheck && pnpm arch:check
 
 Quatro camadas na API (`domain → application → infrastructure → interfaces`), regra de dependência verificada
 na CI. Decisões em [docs/adr](docs/adr).
+
+Telemetria entra por MQTT em lotes e vive em uma time-series collection do MongoDB com 7 dias de retenção (ADR-003, ADR-004).
