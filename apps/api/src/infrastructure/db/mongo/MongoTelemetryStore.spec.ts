@@ -23,7 +23,7 @@ describe('MongoTelemetryStore', () => {
   };
 
   beforeAll(async () => {
-    container = await new GenericContainer('mongo:8')
+    container = await new GenericContainer('mongo:7')
       .withExposedPorts(27017)
       .withWaitStrategy(Wait.forLogMessage(/Waiting for connections/))
       .withStartupTimeout(120_000)
