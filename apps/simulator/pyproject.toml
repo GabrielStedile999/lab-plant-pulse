@@ -1,0 +1,12 @@
+[project]
+name = "simulator"
+version = "0.0.0"
+description = "Publica telemetria de maquinas simuladas no broker MQTT"
+requires-python = ">=3.13"
+dependencies = ["paho-mqtt>=2.1", "pydantic>=2.11"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

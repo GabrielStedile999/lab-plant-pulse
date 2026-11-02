@@ -10,7 +10,8 @@
     "test:watch": "vitest",
     "arch:check": "depcruise src --config .dependency-cruiser.cjs",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx --env-file=../../.env src/infrastructure/db/postgres/migrate.ts"
+    "db:migrate": "tsx --env-file=../../.env src/infrastructure/db/postgres/migrate.ts",
+    "db:seed": "tsx --env-file=../../.env src/infrastructure/db/postgres/seed.ts"
   },
   "dependencies": {
     "@lab-plant-pulse/contracts": "workspace:*",
