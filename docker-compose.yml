@@ -18,7 +18,7 @@ services:
       retries: 10
 
   mongo:
-    image: mongo:8
+    image: mongo:7
     ports:
       - "27017:27017"
     volumes:
@@ -48,6 +48,18 @@ services:
       - "3001:3000"   # Grafana UI (3000 fica para a API)
       - "4317:4317"   # OTLP gRPC
       - "4318:4318"   # OTLP HTTP
+  
+  simulator:
+    build:
+      context: .
+      dockerfile: apps/simulator/Dockerfile
+    environment:
+      MQTT_URL: mqtt://mosquitto:1883
+      INTERVAL_SECONDS: "1"
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   pgdata:

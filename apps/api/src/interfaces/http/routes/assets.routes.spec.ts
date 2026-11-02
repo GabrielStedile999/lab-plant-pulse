@@ -4,6 +4,10 @@ import { RegisterAsset } from '../../../application/use-cases/RegisterAsset';
 import { InMemoryAssetRepository } from '../../../infrastructure/db/memory/InMemoryAssetRepository';
 import { FixedClock, SequentialUuidGenerator } from '../../../test/doubles';
 import { buildServer, type App } from '../server';
+import { IngestTelemetry } from '../../../application/use-cases/IngestTelemetry';
+import { QueryTelemetry } from '../../../application/use-cases/QueryTelemetry';
+import { InMemoryTelemetryStore } from '../../../infrastructure/db/memory/InMemoryTelemetryStore';
+import { InMemoryReadingDedupe } from '../../../infrastructure/dedupe/InMemoryReadingDedupe';
 
 const body = { name: 'Prensa 01', sector: 'Estamparia', sensors: ['temperature'] };
 
@@ -12,14 +16,15 @@ describe('assets routes', () => {
 
   beforeEach(async () => {
     const repository = new InMemoryAssetRepository();
+    const store = new InMemoryTelemetryStore();
+    const clock = new FixedClock(new Date('2026-10-26T12:00:00Z'));
     app = buildServer({
-      registerAsset: new RegisterAsset(
-        repository,
-        new FixedClock(new Date('2026-10-26T12:00:00Z')),
-        new SequentialUuidGenerator(), // o schema de resposta exige uuid válido
-      ),
+      registerAsset: new RegisterAsset(repository, clock, new SequentialUuidGenerator()),
       listAssets: new ListAssets(repository),
+      ingestTelemetry: new IngestTelemetry(store, new InMemoryReadingDedupe(), clock),
+      queryTelemetry: new QueryTelemetry(repository, store, clock),
       checkPostgres: async () => true,
+      checkMongo: async () => true,
     });
     await app.ready();
   });
@@ -73,6 +78,5 @@ describe('assets routes', () => {
     const response = await app.inject({ method: 'GET', url: '/health' });
 
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toEqual({ status: 'ok', checks: { postgres: 'up' } });
-  });
+    expect(response.json()).toEqual({ status: 'ok', checks: { postgres: 'up', mongo: 'up' } });  });
 });

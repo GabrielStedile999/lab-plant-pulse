@@ -1,0 +1,50 @@
+[
+  {
+    "id": "0192f1a2-7c3e-7000-8000-000000000001",
+    "name": "Prensa 01",
+    "sector": "estamparia",
+    "sensors": [
+      "temperature",
+      "vibration"
+    ],
+    "profile": "heating"
+  },
+  {
+    "id": "0192f1a2-7c3e-7000-8000-000000000002",
+    "name": "Torno 02",
+    "sector": "usinagem",
+    "sensors": [
+      "rpm",
+      "vibration"
+    ],
+    "profile": "shaky"
+  },
+  {
+    "id": "0192f1a2-7c3e-7000-8000-000000000003",
+    "name": "Robô de Solda 03",
+    "sector": "solda",
+    "sensors": [
+      "temperature",
+      "rpm"
+    ],
+    "profile": "steady"
+  },
+  {
+    "id": "0192f1a2-7c3e-7000-8000-000000000004",
+    "name": "Esteira 04",
+    "sector": "montagem",
+    "sensors": [
+      "rpm"
+    ],
+    "profile": "intermittent"
+  },
+  {
+    "id": "0192f1a2-7c3e-7000-8000-000000000005",
+    "name": "Estufa 05",
+    "sector": "pintura",
+    "sensors": [
+      "temperature"
+    ],
+    "profile": "faulty"
+  }
+]

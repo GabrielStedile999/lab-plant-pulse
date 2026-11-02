@@ -9,6 +9,7 @@ import {
 import type { AppDeps } from './deps';
 import { healthRoutes } from './routes/health.routes';
 import { assetRoutes } from './routes/assets.routes';
+import { telemetryRoutes } from './routes/telemetry.routes';
 
 export const buildServer = (deps: AppDeps, options: FastifyServerOptions = {}) => {
   const app = Fastify(options).withTypeProvider<ZodTypeProvider>();
@@ -35,6 +36,8 @@ export const buildServer = (deps: AppDeps, options: FastifyServerOptions = {}) =
 
   app.register(healthRoutes, { deps });
   app.register(assetRoutes, { deps });
+  // logo depois de app.register(assetRoutes, { deps });
+  app.register(telemetryRoutes, { deps });
 
   return app;
 };

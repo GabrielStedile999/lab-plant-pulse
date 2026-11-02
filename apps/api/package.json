@@ -10,24 +10,30 @@
     "test:watch": "vitest",
     "arch:check": "depcruise src --config .dependency-cruiser.cjs",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx --env-file=../../.env src/infrastructure/db/postgres/migrate.ts"
+    "db:migrate": "tsx --env-file=../../.env src/infrastructure/db/postgres/migrate.ts",
+    "db:seed": "tsx --env-file=../../.env src/infrastructure/db/postgres/seed.ts"
   },
   "dependencies": {
     "@lab-plant-pulse/contracts": "workspace:*",
     "drizzle-orm": "^0.45.4",
     "fastify": "^5.12.7",
     "fastify-type-provider-zod": "^7.0.0",
+    "mongodb": "^7.8.0",
+    "mqtt": "^5.16.1",
     "pg": "^8.23.1",
+    "pino": "^10.4.0",
     "uuid": "^14.0.3",
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@testcontainers/mongodb": "^12.2.1",
     "@testcontainers/postgresql": "^12.2.1",
     "@types/node": "^26.6.5",
     "@types/pg": "^8.23.1",
     "dependency-cruiser": "^18.7.0",
     "drizzle-kit": "^0.31.11",
     "pino-pretty": "^13.2.0",
+    "testcontainers": "^12.2.1",
     "tsx": "^4.23.15",
     "vitest": "^5.0.5"
   }
