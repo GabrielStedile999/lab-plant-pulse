@@ -33,3 +33,4 @@ jobs:
       - run: pnpm ${{ matrix.task }}
         env:
           NODE_ENV: test
+          DEBUG: testcontainers:containers
