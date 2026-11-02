@@ -1,4 +1,4 @@
-import { MongoDBContainer, type StartedMongoDBContainer } from '@testcontainers/mongodb';
+import { GenericContainer, Wait, type StartedTestContainer } from 'testcontainers';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { MongoClient } from 'mongodb';
 import { TelemetryReading } from '../../../domain/telemetry/TelemetryReading';
@@ -13,32 +13,38 @@ const at = (iso: string, metrics: { temperature?: number; rpm?: number }, assetI
   TelemetryReading.restore({ readingId: `${assetId}:${iso}`, assetId, ts: new Date(iso), metrics, status: 'running' });
 
 describe('MongoTelemetryStore', () => {
-  let container: StartedMongoDBContainer;
-  let client: MongoClient;
+  let container: StartedTestContainer;
+  let client: MongoClient | undefined;
   let store: MongoTelemetryStore;
 
+  const db = () => {
+    if (!client) throw new Error('mongo client not initialised (beforeAll failed?)');
+    return client.db('lab_plant_pulse_test');
+  };
+
   beforeAll(async () => {
-    container = await new MongoDBContainer('mongo:8').start();
-    const mongo = await createMongo(container.getConnectionString(), 'lab_plant_pulse_test');
+    container = await new GenericContainer('mongo:8')
+      .withExposedPorts(27017)
+      .withWaitStrategy(Wait.forLogMessage(/Waiting for connections/))
+      .withStartupTimeout(120_000)
+      .start();
+    const mongo = await createMongo(`mongodb://${container.getHost()}:${container.getMappedPort(27017)}`, 'lab_plant_pulse_test');
     client = mongo.client;
     await ensureTelemetrySchema(mongo.db);
     store = new MongoTelemetryStore(mongo.db);
   });
 
   afterAll(async () => {
-    await client.close();
-    await container.stop();
+    await client?.close();
+    await container?.stop();
   });
 
   beforeEach(async () => {
-    await client.db('lab_plant_pulse_test').collection(TELEMETRY_COLLECTION).deleteMany({});
+    await db().collection(TELEMETRY_COLLECTION).deleteMany({});
   });
 
   it('creates the collection as a time series with the expected options', async () => {
-    const [info] = await client
-  .db('lab_plant_pulse_test')
-  .listCollections({ name: TELEMETRY_COLLECTION }, { nameOnly: false })
-  .toArray();
+    const [info] = await db().listCollections({ name: TELEMETRY_COLLECTION }, { nameOnly: false }).toArray();
 
     expect(info?.type).toBe('timeseries');
     expect(info?.options).toMatchObject({ timeseries: { timeField: 'ts', metaField: 'assetId' }, expireAfterSeconds: 604_800 });
